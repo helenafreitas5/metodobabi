@@ -2,33 +2,13 @@ import streamlit as st
 import requests
 import pandas as pd
 import os
-from dotenv import load_dotenv
-
-# Carrega as variáveis de ambiente do arquivo .env
-load_dotenv()
-
-# Obtém a chave de API do ambiente
-API_KEY = os.getenv('API_KEY')
-
-# Verifica se a chave de API foi carregada corretamente
-if not API_KEY:
-    st.error('A chave de API não foi encontrada. Verifique se o arquivo .env está configurado corretamente.')
-
-# Função para chamar a API do Perplexity
-def call_perplexity_api(query):
-    url = 'https://api.perplexity.ai/query'
-    headers = {
-        'Authorization': f'Bearer {API_KEY}',
-        'Content-Type': 'application/json'
-    }
-    data = {
-        'query': query
-    }
-    response = requests.post(url, json=data, headers=headers)
-    return response.json()
 
 # Configuração da Página
 st.set_page_config(page_title="Método Babi - Automação Inteligente", layout="wide")
+
+# Chave da API da Perplexity (Substituir pela sua chave real)
+API_PERPLEXITY = os.getenv("PERPLEXITY_API_KEY", "SUA_CHAVE_AQUI")
+API_URL_PERPLEXITY = "https://api.perplexity.ai/query"
 
 # Barra de Navegação
 menu = st.sidebar.radio("Navegação", ["Configuração + Fontes", "Dashboard", "Data Lab", "Decision Make"])
@@ -51,12 +31,25 @@ if menu == "Configuração + Fontes":
 elif menu == "Dashboard":
     st.header("📊 Dashboard - Monitoramento e Estratégia")
     
-    # Categorização das Notícias
+    # Categorização das Notícias via Perplexity API
     st.subheader("📰 Categorização Automática das Notícias")
-    categorias = ["BAU (Business as Usual)", "Bomba (Impacto Alto)", "Ação Ninja (Movimento Estratégico)"]
-    categoria_escolhida = st.radio("Escolha a categoria:", categorias)
-    if st.button("Classificar Notícias"):
-        st.success(f"✅ Notícias categorizadas como: {categoria_escolhida}")
+    noticia_titulo = st.text_input("Título da Notícia:")
+    noticia_texto = st.text_area("Resumo da Notícia:")
+    
+    if st.button("📊 Categorizar com IA"):
+        if API_PERPLEXITY == "SUA_CHAVE_AQUI":
+            st.error("❌ API Key da Perplexity não configurada!")
+        else:
+            params = {"query": f"Classifique esta notícia: {noticia_titulo} - {noticia_texto} nas categorias: BAU, Bomba ou Ação Ninja."}
+            headers = {"Authorization": f"Bearer {API_PERPLEXITY}"}
+            response = requests.get(API_URL_PERPLEXITY, params=params, headers=headers)
+            
+            if response.status_code == 200:
+                resultado = response.json()
+                categoria_sugerida = resultado.get("response", "Não foi possível classificar")
+                st.success(f"✅ Categoria sugerida pela IA: {categoria_sugerida}")
+            else:
+                st.error("❌ Erro ao conectar com Perplexity API")
     
     # Tabela de Monitoramento
     st.subheader("📅 Últimas Notícias Categorizadas")
@@ -112,7 +105,7 @@ elif menu == "Decision Make":
     st.subheader("🗣️ Chat com Perplexity API")
     consulta = st.text_input("Faça uma consulta à Perplexity AI:")
     if st.button("Consultar Perplexity"):
-        response = requests.post("https://api.perplexity.ai/query", json={"query": consulta}, headers={"Authorization": f"Bearer {API_KEY}"})
+        response = requests.get(API_URL_PERPLEXITY, params={"query": consulta}, headers={"Authorization": f"Bearer {API_PERPLEXITY}"})
         if response.status_code == 200:
             st.write(response.json())
         else:
