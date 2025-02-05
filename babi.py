@@ -7,7 +7,7 @@ import os
 st.set_page_config(page_title="Método Babi - Automação Inteligente", layout="wide")
 
 # Chave da API da Perplexity (Substituir pela sua chave real)
-API_PERPLEXITY = os.getenv("PERPLEXITY_API_KEY", "SUA_CHAVE_AQUI")
+API_PERPLEXITY = os.getenv("PERPLEXITY_API_KEY", "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")
 API_URL_PERPLEXITY = "https://api.perplexity.ai/query"
 
 # Barra de Navegação
