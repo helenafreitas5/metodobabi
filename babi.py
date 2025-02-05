@@ -8,7 +8,7 @@ st.set_page_config(page_title="Método Babi - Automação Inteligente", layout="
 # Barra de Navegação
 menu = st.sidebar.radio("Navegação", ["Configuração + Fontes", "Dashboard", "Data Lab", "Decision Make"])
 
-# Seção 1: Configuração + Fontes
+# 🟢 1️⃣ Configuração + Fontes
 if menu == "Configuração + Fontes":
     st.header("📌 Configuração Inicial")
     frequencia = st.selectbox("Frequência de Análise:", ["Tempo Real", "Diária", "Semanal"])
@@ -22,7 +22,7 @@ if menu == "Configuração + Fontes":
     if st.button("🔄 Atualizar Dados"):
         st.success("Dados atualizados com sucesso!")
 
-# Seção 2: Dashboard
+# 🔵 2️⃣ Dashboard
 elif menu == "Dashboard":
     st.header("📊 Dashboard - Monitoramento e Estratégia")
     
@@ -48,11 +48,11 @@ elif menu == "Dashboard":
     })
     st.dataframe(df)
     
-    # Fase 4 e 5: Padrões e Monitoramento
+    # 🔵 Fase 4 e 5: Padrões e Monitoramento
     st.subheader("📈 Identificação de Padrões e Monitoramento Contínuo")
     st.write("Aqui serão exibidos padrões emergentes e mudanças nos territórios estratégicos detectados.")
     
-# Seção 3: Data Lab
+# 🟠 3️⃣ Data Lab
 elif menu == "Data Lab":
     st.header("🧪 Data Lab - Análise Semântica com InfraNodus")
     
@@ -64,7 +64,7 @@ elif menu == "Data Lab":
         else:
             st.error("❌ Erro ao conectar com InfraNodus")
 
-# Seção 4: Decision Make
+# 🟣 4️⃣ Decision Make
 elif menu == "Decision Make":
     st.header("🧠 Tomada de Decisão Interativa")
     opcoes = ["Gerar insights estratégicos", "Priorizar categorização automática", "Ambos"]
