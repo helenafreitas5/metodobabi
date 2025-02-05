@@ -14,6 +14,19 @@ API_KEY = os.getenv('API_KEY')
 if not API_KEY:
     st.error('A chave de API não foi encontrada. Verifique se o arquivo .env está configurado corretamente.')
 
+# Função para chamar a API do Perplexity
+def call_perplexity_api(query):
+    url = 'https://api.perplexity.ai/query'
+    headers = {
+        'Authorization': f'Bearer {API_KEY}',
+        'Content-Type': 'application/json'
+    }
+    data = {
+        'query': query
+    }
+    response = requests.post(url, json=data, headers=headers)
+    return response.json()
+
 # Configuração da Página
 st.set_page_config(page_title="Método Babi - Automação Inteligente", layout="wide")
 
@@ -99,7 +112,7 @@ elif menu == "Decision Make":
     st.subheader("🗣️ Chat com Perplexity API")
     consulta = st.text_input("Faça uma consulta à Perplexity AI:")
     if st.button("Consultar Perplexity"):
-        response = requests.get("https://api.perplexity.ai/query", params={"query": consulta}, headers={"Authorization": f"Bearer {API_KEY}"})
+        response = requests.post("https://api.perplexity.ai/query", json={"query": consulta}, headers={"Authorization": f"Bearer {API_KEY}"})
         if response.status_code == 200:
             st.write(response.json())
         else:
