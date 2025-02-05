@@ -1,6 +1,18 @@
 import streamlit as st
 import requests
 import pandas as pd
+import os
+from dotenv import load_dotenv
+
+# Carrega as variáveis de ambiente do arquivo .env
+load_dotenv()
+
+# Obtém a chave de API do ambiente
+API_KEY = os.getenv('API_KEY')
+
+# Verifica se a chave de API foi carregada corretamente
+if not API_KEY:
+    st.error('A chave de API não foi encontrada. Verifique se o arquivo .env está configurado corretamente.')
 
 # Configuração da Página
 st.set_page_config(page_title="Método Babi - Automação Inteligente", layout="wide")
@@ -87,7 +99,7 @@ elif menu == "Decision Make":
     st.subheader("🗣️ Chat com Perplexity API")
     consulta = st.text_input("Faça uma consulta à Perplexity AI:")
     if st.button("Consultar Perplexity"):
-        response = requests.get("https://api.perplexity.ai/query", params={"query": consulta})
+        response = requests.get("https://api.perplexity.ai/query", params={"query": consulta}, headers={"Authorization": f"Bearer {API_KEY}"})
         if response.status_code == 200:
             st.write(response.json())
         else:
